@@ -6,9 +6,6 @@ from fastapi import FastAPI, Request, Header, HTTPException
 
 load_dotenv()
 
-# Your Stripe secret key
-stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
-
 public_url = os.getenv("PUBLIC_URL")
 
 app = FastAPI(
@@ -48,7 +45,7 @@ async def get_payment_url(openai_conversation_id: str = Header(None)):
         )
 
     # set URL variable to https://buy.stripe.com/test_9AQeW3gvnd0zcsE144 and append openai_conversation_id as client_reference_id
-    payment_link = os.environ("STRIPE_PAYMENT_LINK")
+    payment_link = os.getenv("STRIPE_PAYMENT_LINK")
     url = f"{payment_link}?client_reference_id={openai_conversation_id}"
     return f"Tell the user to click here: {url}, and type 'continue' when they're done."
 
@@ -81,6 +78,19 @@ async def has_user_paid(openai_conversation_id: str = Header(None)):
 
     paid_status = await retrieve_paid_status(openai_conversation_id)
     return {"paid": paid_status == "paid"}
+
+
+# Define a route for the privacy policy
+@app.get("/privacy")
+async def privacy():
+    # Read the privacy policy HTML content from a file
+    with open("privacy_policy.html", "r") as file:
+        privacy_policy_content = file.read()
+
+    # Replace the app name placeholder with the actual app name
+    privacy_policy_content = privacy_policy_content.replace("{{app_name}}", app_name)
+
+    return privacy_policy_content
 
 
 if __name__ == "__main__":
