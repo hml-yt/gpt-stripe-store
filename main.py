@@ -6,12 +6,13 @@ from fastapi import FastAPI, Request, Header, HTTPException
 
 load_dotenv()
 
-public_url = os.getenv("PUBLIC_URL")
+app_url = os.getenv("APP_URL")
+app_name = os.getenv("APP_NAME")
 
 app = FastAPI(
     servers=[
         {
-            "url": public_url,
+            "url": app_url,
             "description": "Production environment",
         },
     ]
