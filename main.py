@@ -3,6 +3,7 @@ import stripe
 import requests
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request, Header, HTTPException
+from fastapi.responses import HTMLResponse
 
 load_dotenv()
 
@@ -82,7 +83,7 @@ async def has_user_paid(openai_conversation_id: str = Header(None)):
 
 
 # Define a route for the privacy policy
-@app.get("/privacy")
+@app.get("/privacy", response_class=HTMLResponse)
 async def privacy():
     # Read the privacy policy HTML content from a file
     with open("privacy_policy.html", "r") as file:
