@@ -9,12 +9,12 @@ load_dotenv()
 # Your Stripe secret key
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 
-prod_url = os.getenv("VERCEL_URL")
+public_url = os.getenv("PUBLIC_URL")
 
 app = FastAPI(
     servers=[
         {
-            "url": f"https://{prod_url}",
+            "url": public_url,
             "description": "Production environment",
         },
     ]
